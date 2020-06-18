@@ -1,0 +1,67 @@
+@{
+    ViewData["Title"] = "Landing Page";
+}
+
+@model Transaction
+
+<div class="text-center">
+    <div class="jumbotron">
+        <div class="mx-auto" style="width: 600px;">
+            <h1 class="display">Welcome @ViewBag.User.FirstName @ViewBag.User.LastName!</h1>
+            <hr>
+            <h3>Current Balance: @ViewBag.User.Balance.ToString("C2")</h3>
+            <hr>
+            <form asp-action="TransactionProcess" asp-controller="Home" method="post">
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-4-md-2 offset-md-1 mt-2">
+                            <label asp-for="Amount">Make A Deposit / Withdrawal</label>
+                        </div>
+                        <div class="col-3">
+                            <input class="form-control" asp-for="Amount" type="number">
+                            <div class="row text-danger bg-dark mt-4 mb-2">
+                                <span asp-validation-for="Amount"></span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-striped">
+            <thead class="thead bg-dark text-white">
+                <tr>
+                    <th scope="col">Transaction Type</th>
+                    <th scope="col">Transaction Amount</th>
+                    <th scope="col">Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody class="table-hover">
+                @foreach (Transaction t in @ViewBag.UserTransactions)
+                    {
+                        <tr>
+                            @if (t.Amount > 0)
+                            {
+                                <td>Deposit</td>
+                            }
+                            else
+                            {
+                                <td>Withdrawal</td>
+                            }
+                            @if (t.Amount > 0)
+                            {
+                                <td style="color: green">@t.Amount.Value.ToString("C2")</td>
+                            }
+                            else{
+                                <td style="color: red">@t.Amount.Value.ToString("C2")</td>
+                            }
+                            <td>@t.CreatedAt</td>
+                        </tr>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
